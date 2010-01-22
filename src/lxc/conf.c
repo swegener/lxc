@@ -839,8 +839,9 @@ static int setup_mount_entries(struct lxc_list *mount)
 static int setup_caps(struct lxc_list *caps)
 {
 	struct lxc_list *iterator;
+	struct caps_opt *co;
 	char *drop_entry;
-	int i, capid;
+	int capid;
 
 	lxc_list_for_each(iterator, caps) {
 
@@ -848,12 +849,11 @@ static int setup_caps(struct lxc_list *caps)
 
 		capid = -1;
 
-		for (i = 0; i < sizeof(caps_opt)/sizeof(caps_opt[0]); i++) {
-
-			if (strcmp(drop_entry, caps_opt[i].name))
+		for (co = &caps_opt[0]; co->name != NULL; co++) {
+			if (strcmp(drop_entry, co->name))
 				continue;
 
-			capid = caps_opt[i].value;
+			capid = co->value;
 			break;
 		}
 
